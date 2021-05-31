@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sourdough Tracker</title>
+
+</head>
+
+<body>
+
+    <!-- css -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- overall ui layout -->
+    <h1>sourdough tracker</h1>
+    <div id="container1">
+        <h2>Please input 2 out of the following 3 parameters</h2>
+        <p>time: </p>
+        <textarea id="time"></textarea>
+        <p>starter: </p>
+        <textarea id="starter"></textarea>
+        <p>flour: </p>
+        <textarea id="flour"></textarea>
+        <button type="button" onclick="init()">start</button>
+
+    </div>
+    <div id="container2">
+        <h2>Please select your desired parameters</h2>
+        <p id="param1"></p>
+        <p id="param2"></p>
+
+        <button type="button" onclick="next()">continue</button>
+    </div>
+    <div id="container3">
+        <h2>Please use the following starter formula</h2>
+        <p>flour: ?</p>
+        <p>water: ?</p>
+        <p>starter: ?</p>
+        <p>time: ?</p>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <button type="button" onclick="wait()">feed</button>
+    </div>
+    <div id="container4">
+        <h2>How is your starter doing right now?</h2>
+
+        <button type="button" onclick="done()">done</button>
+    </div>
+    <div id="container5">
+        <h2>How well did I do?</h2>
+
+        <button type="button" onclick="again()">done</button>
+    </div>
+
+
+
+    <!-- jquery -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- scripts -->
+    <script type="text/javascript" src="main.js"></script>
+
+    <!-- tensorflow -->
+    <script src=”https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+
+    <!-- chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="chart.js"></script>
+</body>
+</html>

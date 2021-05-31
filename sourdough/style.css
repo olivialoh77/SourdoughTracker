@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: #79540e;
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #eecc79;
+
+}
+h1 {
+    text-align: center;
+}
+
+#container1 {
+    margin: 37px auto;
+    width: 400px;
+    height: 300px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+#container2, #container3, #container4, #container5 {
+    margin: 37px auto;
+    width: 400px;
+    height: 300px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+}
+
+#instr {
+    margin: auto;
+    width: 350px;
+    height: 350px;
+}
