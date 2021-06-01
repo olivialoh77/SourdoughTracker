@@ -1,8 +1,10 @@
 //TODO:
-/*window.dataLayer = window.dataLayer || [];*/
+//import * as tf from '@tensorflow/tfjs';
+//window.dataLayer = window.dataLayer || [];
+let model;
 
 var time, starter, flour;
-async function init()
+async function start()
 {
     time = $('textarea#time').val();
     starter = $('textarea#starter').val();
@@ -10,6 +12,13 @@ async function init()
     console.log(time);
     console.log(starter)
     console.log(flour)
+
+    model = await tf.loadLayersModel("model/model.json");
+
+    tf.loadLayersModel('model/model.json').then(function(model) {
+            window.model = model;
+        });
+
 
     if (flour && starter)
     {
@@ -19,11 +28,11 @@ async function init()
         y.style.display = "none";
 
         //TODO:
-        /*
-        tf.loadLayersModel('model/model.json').then(function(model) {
+
+        /*tf.loadLayersModel('model/model.json').then(function(model) {
             window.model = model;
         });*/
-
+        predict(starter,flour)
         return;
     }
     else if(flour && time)
@@ -33,13 +42,13 @@ async function init()
         let y = document.getElementById("container1");
         y.style.display = "none";
 
-        //TODO:
-        /*
+        /*//TODO:
+
         tf.loadLayersModel('model/model.json').then(function(model) {
             window.model = model;
-        });
-        predict()
-        */
+        });*/
+        //predict(flour)
+
 
         return;
     }
@@ -50,12 +59,12 @@ async function init()
         y.style.display = "none";
 
         //TODO:
-        /*
-        tf.loadLayersModel('model/model.json').then(function(model) {
+
+        /*tf.loadLayersModel('model/model.json').then(function(model) {
             window.model = model;
-        });
-        predict()
-         */
+        });*/
+        //predict(time)
+
         return;
     }
 
@@ -116,17 +125,31 @@ async function again()
     y.style.display = "none";
 }
 
+async function predict(starter,flour) {
+    let s = parseFloat(starter);
+    let f = parseFloat(flour);
+
+    let tensor = tf.tensor([s,f]);
+    tensor = tf.reshape(tensor, [-1, 2]).print();
+
+    let predictions = await model.predict(tensor).data();
+
+    let results = Array.from(predictions);
+
+    console.log(results);
+};
+
 //TODO:
-/*
-var predict = function(input) {
+
+/*var predict = function(starter,flour) {
     if (window.model) {
-        window.model.predict([tf.tensor(input).reshape([1, 28, 28, 1])]).array().then(function(scores){
+        window.model.predict([tf.tensor(starter,flour).reshape([-1, 2])]).array().then(function(scores){
             scores = scores[0];
             predicted = scores.indexOf(Math.max(...scores));
-            $('#number').html(predicted);
+            console.log(predicted);
         });
     } else {
         // The model takes a bit to load, if we are too fast, wait
-        setTimeout(function(){predict(input)}, 50);
+        setTimeout(function(){predict(starter,flour)}, 50);
     }
 }*/

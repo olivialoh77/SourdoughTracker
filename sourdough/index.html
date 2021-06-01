@@ -21,7 +21,7 @@
         <textarea id="starter"></textarea>
         <p>flour: </p>
         <textarea id="flour"></textarea>
-        <button type="button" onclick="init()">start</button>
+        <button type="button" onclick="start()">start</button>
 
     </div>
     <div id="container2">
@@ -33,10 +33,10 @@
     </div>
     <div id="container3">
         <h2>Please use the following starter formula</h2>
-        <p>flour: ?</p>
-        <p>water: ?</p>
-        <p>starter: ?</p>
-        <p>time: ?</p>
+        <p id="f">flour: </p>
+        <p id="w">water: </p>
+        <p id="s">starter: </p>
+        <p id="t">time: </p>
         <div>
             <canvas id="myChart"></canvas>
         </div>
@@ -63,7 +63,7 @@
     <script type="text/javascript" src="main.js"></script>
 
     <!-- tensorflow -->
-    <script src=”https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
 
     <!-- chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
