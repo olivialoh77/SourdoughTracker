@@ -4,7 +4,10 @@ for(let i = 0; i < 120; i++)
 {
     time_arr.push(i);
 }
-
+for(let i = 0; i < 120; i++)
+{
+    real_time_arr.push(i/2);
+}
 new Chart("myChart", {
     type: "line",
     data: {

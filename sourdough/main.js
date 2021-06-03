@@ -8,7 +8,7 @@ let rise_arr;
 const time_arr = [];
 let pred1_arr;
 let pred2_arr;
-let real_time_arr = [];
+const real_time_arr = [];
 let myChart;
 let myChart2;
 let myChart3;
@@ -17,6 +17,11 @@ let myChart4;
 for(let i = 0; i < 120; i++)
 {
     time_arr.push(i);
+}
+
+for(let i = 0; i < 120; i++)
+{
+    real_time_arr.push(i);
 }
 
 
@@ -58,6 +63,7 @@ async function start()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -98,6 +104,7 @@ async function start()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -138,6 +145,7 @@ async function start()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -179,6 +187,7 @@ async function start()
             data: {
                 labels: pred1_arr,
                 datasets: [{
+                    label: 'starter vs flour',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -213,6 +222,7 @@ async function start()
             data: {
                 labels: pred1_arr,
                 datasets: [{
+                    label: 'time vs starter',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -246,6 +256,7 @@ async function start()
             data: {
                 labels: pred1_arr,
                 datasets: [{
+                    label: 'time vs flour',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -285,6 +296,7 @@ async function select()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -317,6 +329,7 @@ async function select()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -349,6 +362,7 @@ async function select()
             data: {
                 labels: time_arr,
                 datasets: [{
+                    label: 'predicted rise',
                     fill: false,
                     lineTension: 0,
                     backgroundColor: "rgba(0,0,255,1.0)",
@@ -377,8 +391,6 @@ async function next()
 async function wait()
 {
 
-    //change display for starter formula
-
 
     //plot
 
@@ -387,6 +399,27 @@ async function wait()
     x.style.display = "block";
     let y = document.getElementById("container3");
     y.style.display = "none";
+    //change display for starter formula
+    myChart3 = new Chart("myChart3", {
+        type: "line",
+        data: {
+            labels: time_arr,
+            datasets: [{
+                label: 'real time rise',
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: real_time_arr
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max:16}}],
+            }
+        }
+    });
 }
 
 async function done()
@@ -396,6 +429,35 @@ async function done()
     x.style.display = "block";
     let y = document.getElementById("container4");
     y.style.display = "none";
+
+    myChart4 = new Chart("myChart4", {
+        type: "line",
+        data: {
+            labels: time_arr,
+            datasets: [{
+                label: 'predicted rise',
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: rise_arr
+            },
+                {
+                    label: 'real time rise',
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgb(217,0,255)",
+                    borderColor: "rgb(255,0,242)",
+                    data: real_time_arr
+                }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max:16}}],
+            }
+        }
+    });
 }
 
 async function again()
@@ -413,6 +475,8 @@ async function again()
     {
         myChart2.destroy();
     }
+    myChart3.destroy();
+    myChart4.destroy();
 
     let x = document.getElementById("container1");
     x.style.display = "block";
@@ -426,10 +490,7 @@ async function start_train()
     let f = parseInt(flour)
     let input = [s, f]
 
-    for(var i = 0; i < 120; i++)
-    {
-        real_time_arr.push(i/2);
-    }
+
     train(input, real_time_arr);
 
 }
