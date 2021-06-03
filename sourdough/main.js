@@ -6,6 +6,8 @@ let model;
 let time, starter, flour;
 let rise_arr;
 const time_arr = [];
+let pred1_arr;
+let pred2_arr;
 
 for(let i = 0; i < 120; i++)
 {
@@ -77,6 +79,34 @@ async function start()
 
         //TODO:
 
+        const [first, second] = await starterPredict(flour, time);
+        rise_arr = second;
+        starter = first;
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
 
         return;
     }
@@ -126,20 +156,104 @@ async function start()
     x.style.display = "block";
     let y = document.getElementById("container1");
     y.style.display = "none";
+
     if (time)
     {
-        document.getElementById("param1").innerHTML = "flour: ?";
-        document.getElementById("param2").innerHTML = "starter: ?";
+        const [first, second] = await sfPredict(time);
+        pred1_arr = first;
+        pred2_arr = second;
+
+        console.log(pred1_arr)
+        console.log(pred2_arr)
+
+        document.getElementById("param1").innerHTML = "flour: ";
+        document.getElementById("param2").innerHTML = "starter: ";
+
+        new Chart("myChart2", {
+            type: "line",
+            data: {
+                labels: pred1_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: pred2_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+
     }
     else if(flour)
     {
+        const [first, second] = await stPredict(flour);
+        pred1_arr = first;
+        pred2_arr = second;
+
+        console.log(pred1_arr)
+        console.log(pred2_arr)
+
         document.getElementById("param1").innerHTML = "time: ?";
         document.getElementById("param2").innerHTML = "starter: ?";
+
+        new Chart("myChart2", {
+            type: "line",
+            data: {
+                labels: pred1_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: pred2_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
     }
     else
     {
+        const [first, second] = await ftPredict(starter);
+        pred1_arr = first;
+        pred2_arr = second;
+
+        console.log(pred1_arr)
+        console.log(pred2_arr)
+
         document.getElementById("param1").innerHTML = "time: ?";
         document.getElementById("param2").innerHTML = "flour: ?";
+
+        new Chart("myChart2", {
+            type: "line",
+            data: {
+                labels: pred1_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: pred2_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+
     }
 
 }
@@ -152,7 +266,7 @@ async function next()
     y.style.display = "none";
 }
 
-async function wait() //Starter Formula & Predicted Rise
+async function wait()
 {
 
     //change display for starter formula
@@ -204,9 +318,9 @@ async function predict(starter,flour) {
 
 async function maxPredict(arr) {
     max_val = Math.max.apply(Math,arr)*0.9;
-    for (i = 0; i < arr.length; i++)
+    for (var i = 0; i < arr.length; i++)
     {
-        if (arr[i] > max_val)
+        if (arr[i] >= max_val)
             return i;
     }
 }
@@ -217,12 +331,13 @@ async function flourPredict(starter, time) {
     var predict_opt = []
     var min = 0
     var flour = 0
-    for (i = 0; i < 40; i++) {
+    for (var i = 0; i < 40; i++) {
         var tensor = tf.tensor1d([s, i + 10]).expandDims();
         var predictions = await model.predict(tensor).data();
         var results = Array.from(predictions);
-        if (i == 0 || Math.abs(time - maxPredict(results)) < min) {
-            min = Math.abs(time - maxPredict(results))
+        let max_p = await maxPredict(results);
+        if (i == 0 || Math.abs(t - max_p) < min){
+            min = Math.abs(t - max_p)
             predict_opt = results
             flour = i+10
         }
@@ -230,27 +345,60 @@ async function flourPredict(starter, time) {
     return [flour, predict_opt]
 }
 
-function starterPredict(flour, time) {
+async function starterPredict(flour, time) {
     let f = parseFloat(flour);
     let t = parseFloat(time);
+
     var predict_opt = []
     var min = 0
     var s = 0
-    for (i = 0; i < 10; i++) {
-        var tensor = tf.tensor1d([s, i + 10]).expandDims();
+    for (var i = 0; i < 10; i++) {
+        var tensor = tf.tensor1d([i + 10, f]).expandDims();
         var predictions = await model.predict(tensor).data();
         var results = Array.from(predictions);
-        if (i == 0 || Math.abs(t - maxPredict(results)) < min) {
-            min = Math.abs(time - maxPredict(results))
+        let max_p = await maxPredict(results);
+        if (i == 0 || Math.abs(t - max_p) < min) {
+            min = Math.abs(t - max_p)
             predict_opt = results
             s = i+10
+
         }
     }
     return [s, predict_opt]
 }
 
-//TODO:
+async function sfPredict(t) {
+    var starter_array = []
+    var flour_array = []
+    for (var i = 0; i < 10; i++) {
+        starter_array.push(i+10);
+        let [first,second] = await flourPredict(i+10,t);
+        flour_array.push(first);
+    }
+    return [starter_array, flour_array]
+}
 
+async function stPredict(f) {
+    var time_array = []
+    var starter_array = []
+    for (var i = 30; i < 90; i = i+5) {
+        time_array.push(i)
+        let [first,second] = await starterPredict(f, i);
+        starter_array.push(first);
+    }
+    return [time_array, starter_array]
+}
+
+async function ftPredict(s) {
+    var time_array = []
+    var flour_array = []
+    for (var i = 30; i < 90; i = i+5) {
+        time_array.push(i)
+        let [first,second] = await flourPredict(s, i);
+        flour_array.push(first);
+    }
+    return [time_array, flour_array]
+}
 /*var predict = function(starter,flour) {
     if (window.model) {
         window.model.predict([tf.tensor(starter,flour).reshape([-1, 2])]).array().then(function(scores){

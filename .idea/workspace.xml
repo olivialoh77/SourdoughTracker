@@ -20,9 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="460f1187-cb12-4872-8f67-2ec358146750" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/chart2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sourdough/chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/chart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sourdough/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sourdough/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/main.js" afterDir="false" />
     </list>
@@ -65,7 +63,7 @@
       <workItem from="1622527800447" duration="178000" />
       <workItem from="1622527981265" duration="4525000" />
       <workItem from="1622699128927" duration="1778000" />
-      <workItem from="1622701769349" duration="4903000" />
+      <workItem from="1622701769349" duration="9738000" />
     </task>
     <servers />
   </component>
