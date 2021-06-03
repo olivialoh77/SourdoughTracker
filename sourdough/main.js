@@ -9,6 +9,7 @@ const time_arr = [];
 let pred1_arr;
 let pred2_arr;
 const real_time_arr = [];
+let real_time_arr2 = [];
 let myChart;
 let myChart2;
 let myChart3;
@@ -422,6 +423,11 @@ async function wait()
     });
 }
 
+async function data()
+{
+    await cereal();
+}
+
 async function done()
 {
 
@@ -448,7 +454,7 @@ async function done()
                     lineTension: 0,
                     backgroundColor: "rgb(217,0,255)",
                     borderColor: "rgb(255,0,242)",
-                    data: real_time_arr
+                    data: real_time_arr2
                 }]
         },
         options: {
