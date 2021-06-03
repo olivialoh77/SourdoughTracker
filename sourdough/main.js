@@ -3,12 +3,22 @@
 //window.dataLayer = window.dataLayer || [];
 let model;
 
-var time, starter, flour;
+let time, starter, flour;
+let rise_arr;
+const time_arr = [];
+
+for(let i = 0; i < 120; i++)
+{
+    time_arr.push(i);
+}
+
+
 async function start()
 {
     time = $('textarea#time').val();
     starter = $('textarea#starter').val();
     flour = $('textarea#flour').val();
+
     console.log(time);
     console.log(starter)
     console.log(flour)
@@ -27,12 +37,35 @@ async function start()
         let y = document.getElementById("container1");
         y.style.display = "none";
 
-        //TODO:
 
-        /*tf.loadLayersModel('model/model.json').then(function(model) {
-            window.model = model;
-        });*/
-        predict(starter,flour)
+        rise_arr = await predict(starter,flour);
+        time = await maxPredict(rise_arr);
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+
         return;
     }
     else if(flour && time)
@@ -42,12 +75,7 @@ async function start()
         let y = document.getElementById("container1");
         y.style.display = "none";
 
-        /*//TODO:
-
-        tf.loadLayersModel('model/model.json').then(function(model) {
-            window.model = model;
-        });*/
-        //predict(flour)
+        //TODO:
 
 
         return;
@@ -60,10 +88,36 @@ async function start()
 
         //TODO:
 
-        /*tf.loadLayersModel('model/model.json').then(function(model) {
-            window.model = model;
-        });*/
-        //predict(time)
+
+        const [first, second] = await flourPredict(starter, time);
+        rise_arr = second;
+        flour = first;
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+
 
         return;
     }
@@ -98,9 +152,15 @@ async function next()
     y.style.display = "none";
 }
 
-async function wait()
+async function wait() //Starter Formula & Predicted Rise
 {
 
+    //change display for starter formula
+
+
+    //plot
+
+    //switch pages
     let x = document.getElementById("container4");
     x.style.display = "block";
     let y = document.getElementById("container3");
@@ -137,6 +197,8 @@ async function predict(starter,flour) {
     const values = prediction.dataSync();
     const arr = Array.from(values);
     console.log(arr);
+
+
     return arr;
 }
 
@@ -147,6 +209,44 @@ async function maxPredict(arr) {
         if (arr[i] > max_val)
             return i;
     }
+}
+
+async function flourPredict(starter, time) {
+    let s = parseFloat(starter);
+    let t = parseFloat(time);
+    var predict_opt = []
+    var min = 0
+    var flour = 0
+    for (i = 0; i < 40; i++) {
+        var tensor = tf.tensor1d([s, i + 10]).expandDims();
+        var predictions = await model.predict(tensor).data();
+        var results = Array.from(predictions);
+        if (i == 0 || Math.abs(time - maxPredict(results)) < min) {
+            min = Math.abs(time - maxPredict(results))
+            predict_opt = results
+            flour = i+10
+        }
+    }
+    return [flour, predict_opt]
+}
+
+function starterPredict(flour, time) {
+    let f = parseFloat(flour);
+    let t = parseFloat(time);
+    var predict_opt = []
+    var min = 0
+    var s = 0
+    for (i = 0; i < 10; i++) {
+        var tensor = tf.tensor1d([s, i + 10]).expandDims();
+        var predictions = await model.predict(tensor).data();
+        var results = Array.from(predictions);
+        if (i == 0 || Math.abs(t - maxPredict(results)) < min) {
+            min = Math.abs(time - maxPredict(results))
+            predict_opt = results
+            s = i+10
+        }
+    }
+    return [s, predict_opt]
 }
 
 //TODO:

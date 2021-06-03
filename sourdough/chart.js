@@ -1,3 +1,10 @@
+const time_arr = [];
+
+for(let i = 0; i < 120; i++)
+{
+    time_arr.push(i.toString());
+}
+
 const labels = [
     '10',
     '20',
@@ -8,12 +15,12 @@ const labels = [
 ];
 
 const data = {
-    labels: labels,
+    labels: time_arr,
     datasets: [{
         label: 'Starter rise',
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
-        data: [0, 10, 5, 2, 20, 30, 45],
+        data: rise_arr,
     }]
 };
 const config = {
