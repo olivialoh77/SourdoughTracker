@@ -8,7 +8,11 @@ let rise_arr;
 const time_arr = [];
 let pred1_arr;
 let pred2_arr;
-let real_time_arr;
+let real_time_arr = [];
+let myChart;
+let myChart2;
+let myChart3;
+let myChart4;
 
 for(let i = 0; i < 120; i++)
 {
@@ -49,7 +53,7 @@ async function start()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -89,7 +93,7 @@ async function start()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -129,7 +133,7 @@ async function start()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -170,7 +174,7 @@ async function start()
         document.getElementById("param1").innerHTML = "flour: ";
         document.getElementById("param2").innerHTML = "starter: ";
 
-        new Chart("myChart2", {
+        myChart2 = new Chart("myChart2", {
             type: "line",
             data: {
                 labels: pred1_arr,
@@ -189,6 +193,7 @@ async function start()
                 }
             }
         });
+
 
     }
     else if(flour)
@@ -203,7 +208,7 @@ async function start()
         document.getElementById("param1").innerHTML = "time: ?";
         document.getElementById("param2").innerHTML = "starter: ?";
 
-        new Chart("myChart2", {
+        myChart2 = new Chart("myChart2", {
             type: "line",
             data: {
                 labels: pred1_arr,
@@ -222,6 +227,7 @@ async function start()
                 }
             }
         });
+
     }
     else
     {
@@ -235,7 +241,7 @@ async function start()
         document.getElementById("param1").innerHTML = "time: ?";
         document.getElementById("param2").innerHTML = "flour: ?";
 
-        new Chart("myChart2", {
+        myChart2 = new Chart("myChart2", {
             type: "line",
             data: {
                 labels: pred1_arr,
@@ -254,6 +260,7 @@ async function start()
                 }
             }
         });
+
 
     }
 
@@ -273,7 +280,7 @@ async function select()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -305,7 +312,7 @@ async function select()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -337,7 +344,7 @@ async function select()
         document.getElementById("w").innerHTML = "water: " + flour;
         document.getElementById("t").innerHTML = "time: " + time;
 
-        new Chart("myChart", {
+        myChart = new Chart("myChart", {
             type: "line",
             data: {
                 labels: time_arr,
@@ -393,6 +400,19 @@ async function done()
 
 async function again()
 {
+    starter = 0;
+    flour = 0;
+    time = 0;
+
+
+
+    //let graph2 = document.getElementById("myChart2").getContext("2d");
+    myChart.destroy();
+    //let graph1 = document.getElementById("myChart").getContext("2d");
+    if (myChart2)
+    {
+        myChart2.destroy();
+    }
 
     let x = document.getElementById("container1");
     x.style.display = "block";
@@ -402,13 +422,16 @@ async function again()
 
 async function start_train()
 {
-    let input = [starter, flour]
+    let s = parseInt(starter);
+    let f = parseInt(flour)
+    let input = [s, f]
 
     for(var i = 0; i < 120; i++)
     {
         real_time_arr.push(i/2);
     }
     train(input, real_time_arr);
+
 }
 
 async function predict(starter,flour) {
@@ -519,7 +542,7 @@ async function train (input, predicted) {
         loss: tf.losses.meanSquaredError,
         metrics: ['mse'],
     });   // train model
-    return await model.fit(tf.tensor2d(input), tf.tensor2d(predicted), {
+    return await model.fit(tf.tensor1d(input).expandDims(), tf.tensor1d(predicted).expandDims().expandDims(2), {
         batchSize: 1,
         epochs: 1,
     }).then(info => {
