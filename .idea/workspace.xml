@@ -20,12 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="460f1187-cb12-4872-8f67-2ec358146750" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/sourdough/.idea/TinyType.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sourdough/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sourdough/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sourdough/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sourdough/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sourdough/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sourdough/model/group1-shard1of1.bin" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/model/group1-shard1of1.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sourdough/model/model.json" beforeDir="false" afterPath="$PROJECT_DIR$/sourdough/model/model.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +55,8 @@
       <workItem from="1622524154734" duration="2128000" />
       <workItem from="1622526491707" duration="934000" />
       <workItem from="1622527800447" duration="178000" />
-      <workItem from="1622527981265" duration="2839000" />
+      <workItem from="1622527981265" duration="4525000" />
+      <workItem from="1622699128927" duration="1778000" />
     </task>
     <servers />
   </component>

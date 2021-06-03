@@ -129,15 +129,25 @@ async function predict(starter,flour) {
     let s = parseFloat(starter);
     let f = parseFloat(flour);
 
-    let tensor = tf.tensor([s,f]);
-    tensor = tf.reshape(tensor, [-1, 2]).print();
+    const example = tf.tensor1d([s, f]).expandDims();
+    const prediction = model.predict(example);
 
-    let predictions = await model.predict(tensor).data();
+    prediction.print();
 
-    let results = Array.from(predictions);
+    const values = prediction.dataSync();
+    const arr = Array.from(values);
+    console.log(arr);
+    return arr;
+}
 
-    console.log(results);
-};
+async function maxPredict(arr) {
+    max_val = Math.max.apply(Math,arr)*0.9;
+    for (i = 0; i < arr.length; i++)
+    {
+        if (arr[i] > max_val)
+            return i;
+    }
+}
 
 //TODO:
 
