@@ -8,6 +8,7 @@ let rise_arr;
 const time_arr = [];
 let pred1_arr;
 let pred2_arr;
+let real_time_arr;
 
 for(let i = 0; i < 120; i++)
 {
@@ -258,6 +259,106 @@ async function start()
 
 }
 
+async function select()
+{
+    if(time)
+    {
+        starter = $('textarea#p1').val();
+        flour = $('textarea#p2').val();
+
+        rise_arr = await predict(starter, flour);
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+    }
+    else if(flour){
+        time = $('textarea#p1').val();
+        starter = $('textarea#p2').val();
+
+        const [first, second] = await flourPredict(starter, time);
+        rise_arr = second;
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+    }
+    else {
+        time = $('textarea#p1').val();
+        flour = $('textarea#p2').val();
+
+        const [first, second] = await starterPredict(flour, time);
+        rise_arr = second;
+
+        document.getElementById("f").innerHTML = "flour: " + flour;
+        document.getElementById("s").innerHTML = "starter: " + starter;
+        document.getElementById("w").innerHTML = "water: " + flour;
+        document.getElementById("t").innerHTML = "time: " + time;
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: time_arr,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: rise_arr
+                }]
+            },
+            options: {
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max:16}}],
+                }
+            }
+        });
+    }
+}
+
 async function next()
 {
     let x = document.getElementById("container3");
@@ -297,6 +398,17 @@ async function again()
     x.style.display = "block";
     let y = document.getElementById("container5");
     y.style.display = "none";
+}
+
+async function start_train()
+{
+    let input = [starter, flour]
+
+    for(var i = 0; i < 120; i++)
+    {
+        real_time_arr.push(i/2);
+    }
+    train(input, real_time_arr);
 }
 
 async function predict(starter,flour) {
@@ -399,6 +511,22 @@ async function ftPredict(s) {
     }
     return [time_array, flour_array]
 }
+
+
+async function train (input, predicted) {
+    model.compile({
+        optimizer: tf.train.adam(),
+        loss: tf.losses.meanSquaredError,
+        metrics: ['mse'],
+    });   // train model
+    return await model.fit(tf.tensor2d(input), tf.tensor2d(predicted), {
+        batchSize: 1,
+        epochs: 1,
+    }).then(info => {
+        console.log('Final accuracy', info.history.mse);
+    });
+}
+
 /*var predict = function(starter,flour) {
     if (window.model) {
         window.model.predict([tf.tensor(starter,flour).reshape([-1, 2])]).array().then(function(scores){
